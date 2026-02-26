@@ -1,26 +1,57 @@
+import { useState } from "react";
+import Ingredients from "./Ingredients";
+
 function Input() {
-  const handleSubmit = (formdata: FormData) => {
-    const value = formdata.get(`ingredient`);
-    console.log(value);
+  const [ingredient, getIngredient] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState<string>(``);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!inputValue) return;
+    getIngredient((prev) =>
+      prev.includes(inputValue) ? prev : [...prev, inputValue],
+    );
+    setInputValue(``);
   };
 
   return (
-    <div className="mt-15 gap-2 flex items-center justify-center">
-      <form action={handleSubmit}>
+    <div className="mt-15 gap-2 flex flex-col items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col sm:flex-row gap-3 mt-6 max-w-3xl"
+      >
         <input
+          value={inputValue}
+          onChange={(event) => setInputValue(event.target.value)}
           type="text"
           aria-label="add ingredient"
-          className="w-99.5 h-9.5 px-3 py-4 tracking-normal  border border-[#D1D5DB] rounded placeholder:text-sm placeholder:pl-2"
-          placeholder="e.g beans"
           name="ingredient"
+          placeholder="e.g. beans"
+          className="flex-1 px-4 py-2.5 
+               border border-gray-300 rounded-xl
+               text-sm text-gray-900
+               placeholder:text-gray-400
+               focus:outline-none focus:ring-2 
+               focus:ring-black focus:border-black
+               transition"
         />
+
         <button
           type="submit"
-          className="bg-black px-3 text-sm text-white leading-5 font-sans h-9.5 rounded hover:scale-105 hover:cursor-pointer"
+          className="bg-black text-white 
+               px-5 py-2.5 
+               text-sm font-medium 
+               rounded-xl 
+               hover:bg-gray-800 
+               active:scale-95
+               transition-all duration-150"
         >
           Add Ingredient
         </button>
       </form>
+      <div className="mt-20 self-center pl-10">
+        <Ingredients ingredients={ingredient} />
+      </div>
     </div>
   );
 }
