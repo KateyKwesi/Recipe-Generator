@@ -48,13 +48,13 @@ export function Ingredients({ ingredients }: Props) {
   });
 
   return (
-    <div className="">
-      <h3 className="text-lg text-gray-600 leading-8 mb-6 italic">
+    <div className=" max-w-3xl ">
+      <h3 className="text-lg text-center text-gray-600 leading-8 mb-6 italic">
         {ingredientList.length === 0
           ? `Add minimum of 3 ingredients to get a recipe`
           : ` Ingredient(s) on hand :`}
       </h3>
-      <div className=" ml-10 ">{ingredientList}</div>
+      <div className=" mx-5">{ingredientList}</div>
 
       {ingredientList.length >= 3 && (
         <section className="mt-8 max-w-3xl mx-auto bg-[#F0EFEB] rounded p-6 shadow-sm border border-gray-200">

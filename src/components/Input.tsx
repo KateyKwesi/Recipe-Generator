@@ -49,7 +49,7 @@ function Input() {
           Add Ingredient
         </button>
       </form>
-      <div className="mt-20 self-center pl-10">
+      <div className="mt-20 self-center ">
         <Ingredients ingredients={ingredient} />
       </div>
     </div>
