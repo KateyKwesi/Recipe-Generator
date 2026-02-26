@@ -12,11 +12,12 @@ export function Ingredients({ ingredients }: Props) {
   const [response, setResponse] = useState<string>(``);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    if (isClicked) {
-      const ingredientStringify: string = ingredients.join(`,`);
+    if (!isClicked) return;
 
-      const fetchData = async () => {
+    const fetchData = async () => {
+      try {
         setIsLoading(true);
+        const ingredientStringify: string = ingredients.join(`,`);
         const result = await main(
           `i have ${ingredientStringify} Please give me a recipe you'd recommend I make!`,
         );
@@ -24,10 +25,15 @@ export function Ingredients({ ingredients }: Props) {
           setResponse(result);
           setIsLoading(false);
         }
-      };
-      fetchData();
-    }
-  }, [isClicked]);
+      } catch (error) {
+        console.error(`Error fetching recipe`, error);
+        setResponse("Something went wrong. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [isClicked, ingredients]);
   const ingredientList = ingredients.map((ingredient, index) => {
     return (
       <ul
@@ -69,7 +75,9 @@ export function Ingredients({ ingredients }: Props) {
                    text-[#FAFAF8] font-medium 
                    px-5 py-3 rounded-xl shadow-md"
             >
-              Get a recipe
+              {isClicked && response.length > 5
+                ? ` Hide  recipe`
+                : `Get recipe`}
             </button>
           </div>
         </section>
