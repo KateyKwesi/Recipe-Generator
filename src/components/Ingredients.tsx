@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { main } from "./OpenRouter";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -11,8 +11,10 @@ export function Ingredients({ ingredients }: Props) {
   const [isClicked, setIsClicked] = useState(false);
   const [response, setResponse] = useState<string>(``);
   const [isLoading, setIsLoading] = useState(false);
+  const targetRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (!isClicked) return;
+    targetRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
     const fetchData = async () => {
       try {
@@ -34,6 +36,7 @@ export function Ingredients({ ingredients }: Props) {
     };
     fetchData();
   }, [isClicked, ingredients]);
+
   const ingredientList = ingredients.map((ingredient, index) => {
     return (
       <ul
@@ -47,11 +50,15 @@ export function Ingredients({ ingredients }: Props) {
     );
   });
 
+  const handleRecipeBtn = () => {
+    setIsClicked(!isClicked);
+  };
+
   return (
     <div className=" max-w-3xl ">
       <h3 className="text-lg text-center text-gray-600 leading-8 mb-6 italic">
         {ingredientList.length === 0
-          ? `Add minimum of 3 ingredients to get a recipe`
+          ? `Add minimum of 3 ingredients`
           : ` Ingredient(s) on hand :`}
       </h3>
       <div className=" mx-5">{ingredientList}</div>
@@ -69,7 +76,7 @@ export function Ingredients({ ingredients }: Props) {
             </div>
 
             <button
-              onClick={() => setIsClicked(!isClicked)}
+              onClick={handleRecipeBtn}
               className="bg-[#D17557] hover:bg-[#b86449] active:scale-95 
                    transition-all duration-200 
                    text-[#FAFAF8] font-medium 
@@ -84,7 +91,7 @@ export function Ingredients({ ingredients }: Props) {
       )}
 
       {isClicked && (
-        <section className="mt-12 px-4">
+        <section ref={targetRef} className="mt-12 px-4">
           <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
             {isLoading ? (
               <p className="text-gray-500 animate-pulse text-lg">
