@@ -53,7 +53,7 @@ export async function main(ingredients: string) {
     model: "openai/gpt-5.2",
     temperature: 0,
     top_p: 1,
-    max_tokens: 1024,
+    max_tokens: 500,
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: ingredients },
